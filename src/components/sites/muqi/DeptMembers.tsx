@@ -99,14 +99,14 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
 
       {active && (
         <div
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-2 backdrop-blur-sm sm:p-6"
           onClick={() => setActive(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`${active.name}的介绍`}
         >
           <div
-            className="relative w-full max-w-md overflow-hidden bg-white shadow-2xl"
+            className="relative max-h-[94vh] w-full max-w-2xl overflow-y-auto bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -115,7 +115,7 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
               className="absolute right-4 top-4 z-10 text-white/80 transition-colors hover:text-white"
               aria-label="关闭"
             >
-              <X size={22} strokeWidth={1.5} />
+              <X size={26} strokeWidth={1.5} />
             </button>
             {/* 照片区：纵向大图 + 底部渐隐压字 */}
             <div className="relative">
@@ -123,23 +123,23 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
                 <img
                   src={asset(active.image)}
                   alt={active.name}
-                  className="aspect-[4/5] w-full object-cover object-top"
+                  className="aspect-[3/4] max-h-[68vh] w-full object-cover object-top"
                 />
               ) : (
-                <div className="flex aspect-[4/5] w-full items-center justify-center bg-stone-200">
+                <div className="flex aspect-[3/4] max-h-[68vh] w-full items-center justify-center bg-stone-200">
                   <Monogram name={active.name} size="xl" />
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-left">
-                <h3 className="text-3xl font-bold text-white">{active.name}</h3>
-                <p className="mt-1 text-sm font-medium text-amber-400">
+              <div className="absolute inset-x-0 bottom-0 p-6 text-left sm:p-8">
+                <h3 className="text-3xl font-bold text-white sm:text-4xl">{active.name}</h3>
+                <p className="mt-1 text-sm font-medium text-amber-400 sm:text-base">
                   {active.role}
                 </p>
               </div>
             </div>
             {/* 白色介绍区 */}
-            <div className="bg-white px-8 pb-8 pt-6 text-center">
+            <div className="bg-white px-6 pb-8 pt-6 text-center sm:px-10">
               <p className="text-xs font-medium tracking-[0.35em] text-stone-400">
                 INTRODUCTION
               </p>
