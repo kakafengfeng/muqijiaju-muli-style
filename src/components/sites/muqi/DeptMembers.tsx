@@ -29,7 +29,7 @@ export function Monogram({ name, size = "lg" }: { name: string; size?: "lg" | "x
   );
 }
 
-function MemberVisual({ member, size = "lg" }: { member: DeptMember; size?: "lg" | "xl" }) {
+export function MemberVisual({ member, size = "lg" }: { member: DeptMember; size?: "lg" | "xl" }) {
   if (member.image) {
     return (
       <img

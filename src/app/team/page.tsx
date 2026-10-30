@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "lucide-react";
-import { SiteHeader } from "@/components/sites/muqi/SiteHeader";
+import { ArrowLeft } from "lucide-react";
 import { SiteFooter } from "@/components/sites/muqi/SiteFooter";
 import { BackToTop } from "@/components/sites/muqi/BackToTop";
 import { Reveal } from "@/components/sites/muqi/Reveal";
+import { TeamBoard } from "@/components/sites/muqi/TeamBoard";
 import { DEPARTMENTS } from "@/lib/content";
 import { MANAGER_PHOTOS } from "@/lib/team";
 import { asset } from "@/lib/site";
@@ -12,16 +12,33 @@ export const metadata: Metadata = {
   title: "团队架构 — 木栖家居",
 };
 
-/** 团队页：部门索引（分部门，点击进入部门成员页） */
-export default function TeamIndexPage() {
+/** 团队架构页：原站 TeamPage 设计逻辑（单页展示 8 个部门 + 成员详情浮层） */
+export default function TeamPage() {
   return (
     <main className="w-full overflow-x-clip bg-cream">
-      <SiteHeader solid />
+      {/* 顶部细导航条：返回首页 / 团队架构 */}
+      <div className="fixed inset-x-0 top-0 z-40 border-b border-brass/20 bg-cream/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-10">
+          <a
+            href={asset("/")}
+            className="inline-flex items-center gap-2 text-xs font-light tracking-[0.3em] text-charcoal transition-opacity hover:opacity-60"
+          >
+            <ArrowLeft size={15} strokeWidth={1.5} />
+            返回首页
+          </a>
+          <span className="text-[11px] font-light tracking-[0.4em] text-ink/50">
+            TEAM · 团队架构
+          </span>
+        </div>
+      </div>
 
       <section className="w-full bg-cream">
         <div className="mx-auto max-w-7xl px-5 pb-24 pt-32 lg:px-10 lg:pt-40">
+          {/* 页头：大标题 + 介绍，加载时淡入上浮 */}
           <Reveal className="text-center">
-            <p className="mb-6 text-xs font-light tracking-[0.5em] text-brass">TEAM</p>
+            <p className="mb-6 text-xs font-light tracking-[0.5em] text-brass">
+              TEAM
+            </p>
             <h1 className="text-4xl font-light tracking-[0.2em] text-charcoal lg:text-5xl">
               团队架构
             </h1>
@@ -30,66 +47,7 @@ export default function TeamIndexPage() {
             </p>
           </Reveal>
 
-          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {DEPARTMENTS.map((d, i) => (
-              <Reveal key={d.id} delay={(i % 4) * 100}>
-                <a
-                  href={asset(`/team/${d.id}`)}
-                  className="group flex h-full flex-col bg-parchment/60 transition-colors duration-500 hover:bg-walnut"
-                >
-                  {/* 负责人照片：3:4 主视觉 */}
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-walnut/10">
-                    {MANAGER_PHOTOS[d.manager] ? (
-                      <img
-                        src={asset(MANAGER_PHOTOS[d.manager])}
-                        alt={`${d.manager}（${d.name}负责人）`}
-                        loading="lazy"
-                        className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-walnut">
-                        <span className="flex h-32 w-32 items-center justify-center rounded-full text-7xl font-light text-cream ring-1 ring-brass/60">
-                          {d.manager.slice(0, 1)}
-                        </span>
-                      </div>
-                    )}
-                    {/* 负责人标签压在照片底部 */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal/85 via-charcoal/40 to-transparent px-5 pb-4 pt-12">
-                      <p className="text-[11px] font-light tracking-[0.35em] text-cream/80">
-                        负责人
-                      </p>
-                      <p className="mt-1 text-xl font-light tracking-[0.25em] text-cream">
-                        {d.manager}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex flex-1 flex-col p-6">
-                    <p className="text-[11px] font-light tracking-[0.4em] text-brass">
-                      {d.nameEn}
-                    </p>
-                    <h2 className="mt-3 text-2xl font-light tracking-[0.2em] text-charcoal transition-colors duration-500 group-hover:text-cream">
-                      {d.name}
-                    </h2>
-                    <p className="mt-2 text-sm font-light text-ink/60 transition-colors duration-500 group-hover:text-cream/70">
-                      成员 {d.members.length} 人
-                    </p>
-                    <div className="mt-6 flex flex-1 items-end">
-                      <div className="flex w-full items-center justify-between border-t border-ink/10 pt-4 transition-colors duration-500 group-hover:border-cream/20">
-                        <span className="text-xs font-light tracking-[0.3em] text-brass">
-                          查看成员
-                        </span>
-                        <ArrowUpRight
-                          size={20}
-                          strokeWidth={1.5}
-                          className="text-brass transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </Reveal>
-            ))}
-          </div>
+          <TeamBoard departments={DEPARTMENTS} managerPhotos={MANAGER_PHOTOS} />
         </div>
       </section>
 
