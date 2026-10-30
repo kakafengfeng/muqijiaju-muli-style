@@ -80,16 +80,16 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
               className="group block w-full text-center"
               aria-label={`查看${m.name}的介绍`}
             >
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-parchment">
+              <div className="relative aspect-[3/4] w-full overflow-hidden bg-walnut-deep ring-1 ring-cream/10 transition-all duration-500 group-hover:ring-brass/50">
                 <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
                   <MemberVisual member={m} />
                 </div>
               </div>
-              <h3 className="mt-5 text-lg font-light tracking-[0.25em] text-charcoal">
+              <h3 className="mt-5 text-lg font-light tracking-[0.25em] text-cream">
                 {m.name}
               </h3>
               <div className="mx-auto mt-2 h-[1px] w-8 bg-brass transition-all duration-500 group-hover:w-14" />
-              <p className="mt-2 text-xs font-light tracking-[0.3em] text-ink/55">
+              <p className="mt-2 text-xs font-light tracking-[0.3em] text-cream/55">
                 {m.role}
               </p>
             </button>
@@ -106,13 +106,13 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
           aria-label={`${active.name}的介绍`}
         >
           <div
-            className="relative w-full max-w-md bg-cream p-8 text-center shadow-2xl lg:p-10"
+            className="relative w-full max-w-md bg-walnut-deep p-8 text-center shadow-2xl ring-1 ring-brass/30 lg:p-10"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setActive(null)}
-              className="absolute right-4 top-4 text-ink/40 transition-colors hover:text-charcoal"
+              className="absolute right-4 top-4 text-cream/40 transition-colors hover:text-cream"
               aria-label="关闭"
             >
               <X size={22} strokeWidth={1.5} />
@@ -120,14 +120,14 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
             <div className="mx-auto flex h-52 items-center justify-center overflow-hidden">
               <MemberVisual member={active} size="xl" />
             </div>
-            <h3 className="mt-6 text-2xl font-light tracking-[0.25em] text-charcoal">
+            <h3 className="mt-6 text-2xl font-light tracking-[0.25em] text-cream">
               {active.name}
             </h3>
             <p className="mt-2 text-xs font-light tracking-[0.35em] text-brass">
               {active.role}
             </p>
             <div className="mx-auto mt-4 h-[1px] w-10 bg-brass/60" />
-            <p className="mt-4 text-[15px] font-light leading-relaxed text-ink/70">
+            <p className="mt-4 text-[15px] font-light leading-relaxed text-cream/70">
               {active.intro || "暂无个人介绍"}
             </p>
           </div>
