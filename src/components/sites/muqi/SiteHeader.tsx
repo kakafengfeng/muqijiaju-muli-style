@@ -6,19 +6,21 @@ import { cn } from "@/lib/utils";
 import { asset } from "@/lib/site";
 
 const NAV = [
-  { label: "关于", href: "#about" },
-  { label: "产品", href: "#products" },
-  { label: "项目", href: "#projects" },
-  { label: "新闻", href: "#news" },
-  { label: "联系", href: "#contact" },
+  { label: "关于", href: "/#about" },
+  { label: "产品", href: "/#products" },
+  { label: "项目", href: "/#projects" },
+  { label: "团队", href: "/team" },
+  { label: "新闻", href: "/#news" },
+  { label: "联系", href: "/#contact" },
 ];
 
 /**
  * 页眉：桌面端 absolute 压在 Hero 上方；
  * 未滚动时透明（hover 整条变米色、文字反色），滚动后固定为米色底；
  * 移动端为白色固定顶栏 + 全屏滑入菜单。
+ * solid=true 时（子页面）默认即为米色底深色字状态。
  */
-export function SiteHeader() {
+export function SiteHeader({ solid = false }: { solid?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,8 +39,8 @@ export function SiteHeader() {
     };
   }, [menuOpen]);
 
-  // 未滚动：透明底白字；hover / 滚动后：米色底深字
-  const light = scrolled || hovered;
+  // 未滚动：透明底白字；hover / 滚动后 / 子页 solid：米色底深字
+  const light = solid || scrolled || hovered;
 
   return (
     <>
@@ -49,13 +51,15 @@ export function SiteHeader() {
           "left-0 top-0 z-50 w-full transition-all duration-300",
           // 移动端始终白色固定顶栏
           "fixed bg-white text-charcoal shadow-[0_1px_0_rgba(0,0,0,0.06)]",
-          // 桌面端：未滚动时 absolute 透明压在 Hero 上
-          "lg:absolute lg:bg-transparent lg:text-cream lg:shadow-none",
+          // 桌面端：首页未滚动时 absolute 透明压在 Hero 上；子页直接固定
+          solid
+            ? "lg:fixed"
+            : "lg:absolute lg:bg-transparent lg:text-cream lg:shadow-none",
           light && "lg:fixed lg:bg-cream/95 lg:text-charcoal lg:shadow-[0_8px_30px_rgba(33,28,22,0.08)] lg:backdrop-blur",
         )}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:h-20 lg:px-10">
-          <a href="#top" className="flex items-center gap-3">
+          <a href={asset("/#top")} className="flex items-center gap-3">
             <img src={asset("/images/logo.svg")} alt="木栖家居" className="h-9 w-auto lg:h-10" />
             <span className="hidden text-lg font-medium tracking-[0.2em] sm:block">木栖家居</span>
           </a>
@@ -64,7 +68,7 @@ export function SiteHeader() {
             {NAV.map((item) => (
               <a
                 key={item.href}
-                href={item.href}
+                href={asset(item.href)}
                 className="text-[15px] font-light tracking-[0.25em] opacity-90 transition-opacity hover:opacity-100"
               >
                 {item.label}
@@ -104,7 +108,7 @@ export function SiteHeader() {
           {NAV.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={asset(item.href)}
               onClick={() => setMenuOpen(false)}
               className="text-2xl font-light tracking-[0.3em] text-charcoal"
             >

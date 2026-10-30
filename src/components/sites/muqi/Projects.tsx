@@ -2,17 +2,18 @@ import { Reveal } from "./Reveal";
 import { asset } from "@/lib/site";
 
 interface Project {
+  slug: string;
   name: string;
   image: string;
 }
 
 const PROJECTS: Project[] = [
-  { name: "金地", image: "/images/projects/jindi-1.jpg" },
-  { name: "金茂", image: "/images/projects/jinmao-1.jpg" },
-  { name: "世茂", image: "/images/projects/shimao-1.jpg" },
-  { name: "万科", image: "/images/projects/vanke-1.png" },
-  { name: "中骏", image: "/images/projects/zhongjun-1.png" },
-  { name: "紫薇", image: "/images/projects/ziwei-1.jpg" },
+  { slug: "jindi", name: "金地", image: "/images/projects/jindi-1.jpg" },
+  { slug: "jinmao", name: "金茂", image: "/images/projects/jinmao-1.jpg" },
+  { slug: "shimao", name: "世茂", image: "/images/projects/shimao-1.jpg" },
+  { slug: "vanke", name: "万科", image: "/images/projects/vanke-1.png" },
+  { slug: "zhongjun", name: "中骏", image: "/images/projects/zhongjun-1.png" },
+  { slug: "ziwei", name: "紫薇", image: "/images/projects/ziwei-1.jpg" },
 ];
 
 /** 项目案例：六宫格，hover 放大 */
@@ -29,7 +30,10 @@ export function Projects() {
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROJECTS.map((p, i) => (
             <Reveal key={p.name} delay={(i % 3) * 120}>
-              <figure className="group relative aspect-[4/3] cursor-pointer overflow-hidden bg-parchment">
+              <a
+                href={asset(`/projects/${p.slug}`)}
+                className="group relative block aspect-[4/3] overflow-hidden bg-parchment"
+              >
                 <img
                   src={asset(p.image)}
                   alt={`${p.name}项目`}
@@ -37,11 +41,11 @@ export function Projects() {
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-95" />
-                <figcaption className="absolute bottom-0 left-0 flex w-full items-center justify-between p-6">
+                <div className="absolute bottom-0 left-0 flex w-full items-center justify-between p-6">
                   <span className="text-xl font-light tracking-[0.25em] text-cream">{p.name}</span>
                   <span className="text-xs font-light tracking-[0.3em] text-cream/75">精选案例</span>
-                </figcaption>
-              </figure>
+                </div>
+              </a>
             </Reveal>
           ))}
         </div>

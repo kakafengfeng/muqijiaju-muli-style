@@ -6,6 +6,7 @@ import { Reveal } from "./Reveal";
 import { asset } from "@/lib/site";
 
 interface Product {
+  id: string;
   no: string;
   categoryEn: string;
   name: string;
@@ -15,32 +16,36 @@ interface Product {
 
 const PRODUCTS: Product[] = [
   {
+    id: "01",
     no: "01",
     categoryEn: "Door System",
     name: "隐形门系统",
     description: "无界设计，空间延伸的艺术。",
-    image: "/images/img-2.jpg",
+    image: "/images/img-3.jpg",
   },
   {
+    id: "02",
     no: "02",
     categoryEn: "Wood Veneer Wall",
     name: "木饰面护墙",
     description: "温润触感，定义空间基调。",
-    image: "/images/img-3.jpg",
+    image: "/images/img-4.jpg",
   },
   {
+    id: "03",
     no: "03",
     categoryEn: "Bespoke Storage",
     name: "高定收纳",
     description: "理性秩序与感性美学的平衡。",
-    image: "/images/img-4.jpg",
+    image: "/images/img-5.jpg",
   },
   {
+    id: "04",
     no: "04",
     categoryEn: "Smart Control System",
     name: "智能中控",
     description: "科技隐于无形，服务生活。",
-    image: "/images/img-5.jpg",
+    image: "/images/img-6.jpg",
   },
 ];
 
@@ -48,7 +53,7 @@ const PRODUCTS: Product[] = [
 export function ProductCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
-  const drag = useRef({ active: false, startX: 0, startScroll: 0 });
+  const drag = useRef({ active: false, startX: 0, startScroll: 0, moved: 0 });
 
   const updateProgress = () => {
     const el = trackRef.current;
@@ -58,9 +63,12 @@ export function ProductCarousel() {
   };
 
   useEffect(() => {
-    updateProgress();
+    const raf = requestAnimationFrame(updateProgress);
     window.addEventListener("resize", updateProgress);
-    return () => window.removeEventListener("resize", updateProgress);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", updateProgress);
+    };
   }, []);
 
   const scrollByCard = (dir: 1 | -1) => {
@@ -107,22 +115,33 @@ export function ProductCarousel() {
           onPointerDown={(e) => {
             const el = trackRef.current;
             if (!el) return;
-            drag.current = { active: true, startX: e.clientX, startScroll: el.scrollLeft };
+            drag.current = { active: true, startX: e.clientX, startScroll: el.scrollLeft, moved: 0 };
           }}
           onPointerMove={(e) => {
             const el = trackRef.current;
             if (!el || !drag.current.active) return;
-            el.scrollLeft = drag.current.startScroll - (e.clientX - drag.current.startX);
+            const dx = e.clientX - drag.current.startX;
+            drag.current.moved = Math.max(drag.current.moved, Math.abs(dx));
+            el.scrollLeft = drag.current.startScroll - dx;
           }}
           onPointerUp={() => (drag.current.active = false)}
           onPointerLeave={() => (drag.current.active = false)}
+          onClickCapture={(e) => {
+            // 拖拽后松手的点击不触发卡片跳转
+            if (drag.current.moved > 8) {
+              e.preventDefault();
+              e.stopPropagation();
+              drag.current.moved = 0;
+            }
+          }}
           className="no-scrollbar flex cursor-grab snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 active:cursor-grabbing lg:px-[max(2.5rem,calc((100vw-80rem)/2+2.5rem))]"
         >
           {PRODUCTS.map((p) => (
-            <article
+            <a
               key={p.no}
               data-card
-              className="group w-[78vw] shrink-0 snap-start overflow-hidden bg-cream sm:w-[46vw] lg:w-[30vw]"
+              href={asset(`/products/${p.id}`)}
+              className="group block w-[78vw] shrink-0 snap-start overflow-hidden bg-cream sm:w-[46vw] lg:w-[30vw]"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -139,8 +158,11 @@ export function ProductCarousel() {
                 </div>
                 <h3 className="mt-3 text-2xl font-light tracking-[0.15em] text-charcoal">{p.name}</h3>
                 <p className="mt-2 text-[15px] font-light text-ink/70">{p.description}</p>
+                <p className="mt-4 text-sm font-light tracking-[0.3em] text-brass">
+                  查看详情 <span aria-hidden>→</span>
+                </p>
               </div>
-            </article>
+            </a>
           ))}
         </div>
 
