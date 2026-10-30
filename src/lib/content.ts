@@ -153,6 +153,7 @@ export const DEPARTMENTS: Department[] = [
     nameEn: "Sales Dept.",
     manager: "郑晓博",
     members: [
+      { id: "d1-zxb", name: "郑晓博", role: "销售经理", intro: "深耕高端家居定制行业，带领销售团队为每一位客户提供最贴心的服务。", image: "/images/team/zhengxiaobo.jpg" },
       { id: "d1-m1", name: "王丽娜", role: "销售经理", intro: "倾听客户需求，提供最温暖的家居方案。", image: "" },
       { id: "d1-m2", name: "王丽艳", role: "高级顾问", intro: "专业与热情并重，为您排忧解难。", image: "" },
       { id: "d1-m3", name: "王南南", role: "客户经理", intro: "致力于建立长期的客户信任关系。", image: "" },

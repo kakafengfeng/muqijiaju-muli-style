@@ -7,19 +7,19 @@ import type { DeptMember } from "@/lib/content";
 import { asset } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
-/** 无照片成员的首字徽章：深胡桃木底 + 米字 + 黄铜细环 */
+/** 无照片成员的首字徽章（浅色适配：浅灰底 + 深字） */
 export function Monogram({ name, size = "lg" }: { name: string; size?: "lg" | "xl" }) {
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-full bg-walnut ring-1 ring-brass/60",
+        "flex items-center justify-center rounded-full bg-stone-200",
         size === "xl" ? "h-40 w-40" : "h-24 w-24",
       )}
       aria-hidden
     >
       <span
         className={cn(
-          "font-light text-cream",
+          "font-medium text-stone-600",
           size === "xl" ? "text-6xl" : "text-4xl",
         )}
       >
@@ -44,13 +44,13 @@ export function MemberVisual({ member, size = "lg" }: { member: DeptMember; size
     );
   }
   return (
-    <div className="flex h-full w-full items-center justify-center bg-walnut/95">
+    <div className="flex h-full w-full items-center justify-center bg-stone-100">
       <Monogram name={member.name} size={size} />
     </div>
   );
 }
 
-/** 部门成员网格 + 点击弹出详情浮层 */
+/** 部门成员网格 + 点击弹出详情浮层（原站浅色风格） */
 export function DeptMembers({ members }: { members: DeptMember[] }) {
   const [active, setActive] = useState<DeptMember | null>(null);
 
@@ -71,25 +71,25 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
 
   return (
     <>
-      <div className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+      <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
         {members.map((m, i) => (
-          <Reveal key={m.id} delay={(i % 4) * 90}>
+          <Reveal key={m.id} delay={(i % 3) * 90}>
             <button
               type="button"
               onClick={() => setActive(m)}
               className="group block w-full text-center"
               aria-label={`查看${m.name}的介绍`}
             >
-              <div className="relative aspect-[3/4] w-full overflow-hidden bg-walnut-deep ring-1 ring-cream/10 transition-all duration-500 group-hover:ring-brass/50">
-                <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
+              <div className="aspect-[3/4] w-full overflow-hidden bg-stone-100">
+                <div className="h-full w-full transition-transform duration-500 group-hover:scale-105">
                   <MemberVisual member={m} />
                 </div>
               </div>
-              <h3 className="mt-5 text-lg font-light tracking-[0.25em] text-cream">
+              <h3 className="mt-4 text-[17px] font-bold text-stone-900">
                 {m.name}
               </h3>
-              <div className="mx-auto mt-2 h-[1px] w-8 bg-brass transition-all duration-500 group-hover:w-14" />
-              <p className="mt-2 text-xs font-light tracking-[0.3em] text-cream/55">
+              <div className="mx-auto mt-2 h-px w-8 bg-stone-300" />
+              <p className="mt-2 text-xs tracking-[0.2em] text-stone-400">
                 {m.role}
               </p>
             </button>
@@ -99,37 +99,58 @@ export function DeptMembers({ members }: { members: DeptMember[] }) {
 
       {active && (
         <div
-          className="fixed inset-0 z-[90] flex items-center justify-center bg-charcoal/80 p-5 backdrop-blur-sm"
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
           onClick={() => setActive(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`${active.name}的介绍`}
         >
           <div
-            className="relative w-full max-w-md bg-walnut-deep p-8 text-center shadow-2xl ring-1 ring-brass/30 lg:p-10"
+            className="relative w-full max-w-md overflow-hidden bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={() => setActive(null)}
-              className="absolute right-4 top-4 text-cream/40 transition-colors hover:text-cream"
+              className="absolute right-4 top-4 z-10 text-white/80 transition-colors hover:text-white"
               aria-label="关闭"
             >
               <X size={22} strokeWidth={1.5} />
             </button>
-            <div className="mx-auto flex h-52 items-center justify-center overflow-hidden">
-              <MemberVisual member={active} size="xl" />
+            {/* 照片区：纵向大图 + 底部渐隐压字 */}
+            <div className="relative">
+              {active.image ? (
+                <img
+                  src={asset(active.image)}
+                  alt={active.name}
+                  className="aspect-[4/5] w-full object-cover object-top"
+                />
+              ) : (
+                <div className="flex aspect-[4/5] w-full items-center justify-center bg-stone-200">
+                  <Monogram name={active.name} size="xl" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 text-left">
+                <h3 className="text-3xl font-bold text-white">{active.name}</h3>
+                <p className="mt-1 text-sm font-medium text-amber-400">
+                  {active.role}
+                </p>
+              </div>
             </div>
-            <h3 className="mt-6 text-2xl font-light tracking-[0.25em] text-cream">
-              {active.name}
-            </h3>
-            <p className="mt-2 text-xs font-light tracking-[0.35em] text-brass">
-              {active.role}
-            </p>
-            <div className="mx-auto mt-4 h-[1px] w-10 bg-brass/60" />
-            <p className="mt-4 text-[15px] font-light leading-relaxed text-cream/70">
-              {active.intro || "暂无个人介绍"}
-            </p>
+            {/* 白色介绍区 */}
+            <div className="bg-white px-8 pb-8 pt-6 text-center">
+              <p className="text-xs font-medium tracking-[0.35em] text-stone-400">
+                INTRODUCTION
+              </p>
+              <p className="mt-4 text-[15px] italic leading-relaxed text-stone-600">
+                “{active.intro || "暂无个人介绍"}”
+              </p>
+              <div className="mx-auto mt-6 h-px w-full bg-stone-200" />
+              <p className="mt-4 text-xs text-stone-400">
+                Employee ID: {active.id}
+              </p>
+            </div>
           </div>
         </div>
       )}
