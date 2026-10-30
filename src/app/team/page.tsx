@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/sites/muqi/SiteFooter";
 import { BackToTop } from "@/components/sites/muqi/BackToTop";
 import { Reveal } from "@/components/sites/muqi/Reveal";
 import { DEPARTMENTS } from "@/lib/content";
+import { MANAGER_PHOTOS } from "@/lib/team";
 import { asset } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -34,27 +35,56 @@ export default function TeamIndexPage() {
               <Reveal key={d.id} delay={(i % 4) * 100}>
                 <a
                   href={asset(`/team/${d.id}`)}
-                  className="group flex h-full flex-col bg-parchment/60 p-8 transition-colors duration-500 hover:bg-walnut"
+                  className="group flex h-full flex-col bg-parchment/60 transition-colors duration-500 hover:bg-walnut"
                 >
-                  <p className="text-[11px] font-light tracking-[0.4em] text-brass">
-                    {d.nameEn}
-                  </p>
-                  <h2 className="mt-4 text-2xl font-light tracking-[0.2em] text-charcoal transition-colors duration-500 group-hover:text-cream">
-                    {d.name}
-                  </h2>
-                  <div className="mt-6 flex-1 space-y-2 text-sm font-light text-ink/60 transition-colors duration-500 group-hover:text-cream/70">
-                    <p>负责人：{d.manager}</p>
-                    <p>成员 {d.members.length} 人</p>
+                  {/* 负责人照片：3:4 主视觉 */}
+                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-walnut/10">
+                    {MANAGER_PHOTOS[d.manager] ? (
+                      <img
+                        src={asset(MANAGER_PHOTOS[d.manager])}
+                        alt={`${d.manager}（${d.name}负责人）`}
+                        loading="lazy"
+                        className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-walnut">
+                        <span className="flex h-32 w-32 items-center justify-center rounded-full text-7xl font-light text-cream ring-1 ring-brass/60">
+                          {d.manager.slice(0, 1)}
+                        </span>
+                      </div>
+                    )}
+                    {/* 负责人标签压在照片底部 */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-charcoal/85 via-charcoal/40 to-transparent px-5 pb-4 pt-12">
+                      <p className="text-[11px] font-light tracking-[0.35em] text-cream/80">
+                        负责人
+                      </p>
+                      <p className="mt-1 text-xl font-light tracking-[0.25em] text-cream">
+                        {d.manager}
+                      </p>
+                    </div>
                   </div>
-                  <div className="mt-8 flex items-center justify-between">
-                    <span className="text-xs font-light tracking-[0.3em] text-brass">
-                      查看成员
-                    </span>
-                    <ArrowUpRight
-                      size={20}
-                      strokeWidth={1.5}
-                      className="text-brass transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
-                    />
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-[11px] font-light tracking-[0.4em] text-brass">
+                      {d.nameEn}
+                    </p>
+                    <h2 className="mt-3 text-2xl font-light tracking-[0.2em] text-charcoal transition-colors duration-500 group-hover:text-cream">
+                      {d.name}
+                    </h2>
+                    <p className="mt-2 text-sm font-light text-ink/60 transition-colors duration-500 group-hover:text-cream/70">
+                      成员 {d.members.length} 人
+                    </p>
+                    <div className="mt-6 flex flex-1 items-end">
+                      <div className="flex w-full items-center justify-between border-t border-ink/10 pt-4 transition-colors duration-500 group-hover:border-cream/20">
+                        <span className="text-xs font-light tracking-[0.3em] text-brass">
+                          查看成员
+                        </span>
+                        <ArrowUpRight
+                          size={20}
+                          strokeWidth={1.5}
+                          className="text-brass transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </a>
               </Reveal>
