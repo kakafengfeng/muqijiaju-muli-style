@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/sites/muqi/SiteHeader";
 import { SiteFooter } from "@/components/sites/muqi/SiteFooter";
 import { BackToTop } from "@/components/sites/muqi/BackToTop";
 import { Reveal } from "@/components/sites/muqi/Reveal";
-import { DeptMembers, Monogram } from "@/components/sites/muqi/DeptMembers";
+import { DeptMembers } from "@/components/sites/muqi/DeptMembers";
 import { MANAGER_PHOTOS } from "@/lib/team";
 import { DEPARTMENTS } from "@/lib/content";
 import { asset } from "@/lib/site";
@@ -59,10 +59,17 @@ export default async function DeptPage({
               <img
                 src={asset(managerPhoto)}
                 alt={dept.manager}
-                className="h-28 w-28 rounded-full object-cover object-top ring-1 ring-brass/60"
+                className="aspect-[3/4] w-44 shrink-0 bg-sand object-cover object-top ring-1 ring-brass/60 lg:w-52"
               />
             ) : (
-              <Monogram name={dept.manager} />
+              <div
+                aria-hidden
+                className="flex aspect-[3/4] w-44 shrink-0 items-center justify-center bg-walnut ring-1 ring-brass/60 lg:w-52"
+              >
+                <span className="text-6xl font-light text-cream">
+                  {dept.manager.charAt(0)}
+                </span>
+              </div>
             )}
             <div>
               <p className="text-xs font-light tracking-[0.5em] text-brass">
